@@ -8,7 +8,7 @@ namespace NewsAPI.Models
 {
     public class Article
     {
-        public Source? Source { get; set; } 
+        public SourceId? Source { get; set; } 
         public string Author { get; set; } = string.Empty;
         public string Title { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
