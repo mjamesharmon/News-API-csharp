@@ -17,7 +17,6 @@ namespace NewsAPI.Serialization
 		public QueryParametersBuilder AppendParameter<T>(T request,
 			PropertyInfo property)
 		{
-
 			var attribute =
 				property.GetCustomAttribute<RequestParameterAttribute>() ??
 				null;

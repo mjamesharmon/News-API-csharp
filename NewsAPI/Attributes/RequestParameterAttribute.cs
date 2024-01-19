@@ -12,22 +12,25 @@ namespace NewsAPI.Attributes
 		public RequestParameterAttribute(string name, Type? serializer = null)
 		{
 			_name = name;
-			_serializer = serializer ?? typeof(StringSerializer);
+			_serializer = serializer ?? TypeOfDefaultSerializer;
 		}
 
 		public string ApplyTo<T>(T item, PropertyInfo pi)
 		{
-			var serializer = _serializer.Assembly.
-				CreateInstance(_serializer.FullName ?? string.Empty)
-				as IQueryValueSerializer ??
-				throw new InvalidOperationException(
-					"Serializer is not of type IQueryValueSerializer");
+			var serializer = Activator.CreateInstance(_serializer) 
+				as IQueryValueSerializer ?? DefaultSerializer;
 			string value = serializer.Serialize(pi.GetValue(item));
 
 			return (string.IsNullOrWhiteSpace(value)) ? string.Empty :
 				$"{_name}={value}";
-			
 		}
+
+		private IQueryValueSerializer DefaultSerializer =>
+			new StringSerializer();
+
+		private Type TypeOfDefaultSerializer
+		 => typeof(StringSerializer);
+		
 	}
 }
 
