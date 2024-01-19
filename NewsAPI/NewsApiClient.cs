@@ -1,4 +1,5 @@
-﻿using NewsAPI.Constants;
+﻿using NewsAPI.Attributes;
+using NewsAPI.Constants;
 using NewsAPI.Models;
 using System.Diagnostics;
 using System.Net;
@@ -29,7 +30,32 @@ namespace NewsAPI
         public NewsApiClient(string apiKey) :
             this(new HttpClient(), new NewsApiClientOptions { ApiKey = apiKey })
         { }
-     
+
+        /// <summary>
+        ///
+        /// 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        public async Task<SourcesResult> GetSourcesAsync(SourcesRequest request)
+        {
+            string route = GetRoute<SourcesRequest>();
+
+           var httpResponse = await _http.GetAsync(route);
+           httpResponse.EnsureSuccessStatusCode();
+           var json = await httpResponse.Content.ReadAsStringAsync();
+            return JsonSerializer.Deserialize<SourcesResult>(json) ??
+                 new SourcesResult();
+        }
+
+        private string GetRoute<T>()
+        {
+           RouteAttribute? routing = Attribute.GetCustomAttribute(typeof(T),
+                typeof(RouteAttribute)) as RouteAttribute;
+
+            return (routing == null) ? string.Empty :
+                routing.Route;
+        }
 
         /// <summary>
         /// Query the /v2/top-headlines endpoint for live top news headlines.

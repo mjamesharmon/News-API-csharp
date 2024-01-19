@@ -3,7 +3,7 @@ using NewsAPI.Constants;
 
 namespace NewsAPI.Models
 {
-	public class SourcesResponse
+	public class SourcesResult
 	{
         public Statuses Status { get; set; }
         public Error Error { get; set; } = new();

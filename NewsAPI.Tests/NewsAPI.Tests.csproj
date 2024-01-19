@@ -22,4 +22,15 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="TestData\" />
+    <None Remove="Mocks\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="TestData\" />
+    <Folder Include="Mocks\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NewsAPI\NewsAPI.csproj" />
+  </ItemGroup>
 </Project>
