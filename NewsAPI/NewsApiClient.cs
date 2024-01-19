@@ -1,8 +1,10 @@
 ﻿using NewsAPI.Attributes;
 using NewsAPI.Constants;
 using NewsAPI.Models;
+using NewsAPI.Serialization;
 using System.Diagnostics;
 using System.Net;
+using System.Reflection;
 using System.Text.Json;
 
 namespace NewsAPI
@@ -41,12 +43,21 @@ namespace NewsAPI
         {
             string route = GetRoute<SourcesRequest>();
 
-           var httpResponse = await _http.GetAsync(route);
+            var queryString = request.GetType().GetProperties().
+                Aggregate(new QueryParametersBuilder(), (builder, property) =>
+                    builder.AppendParameter(request, property)).
+                    ToString();
+            string path = (string.IsNullOrWhiteSpace(queryString)) ?
+                route : $"{route}?{queryString}";
+           
+           var httpResponse = await _http.GetAsync(path);
            httpResponse.EnsureSuccessStatusCode();
            var json = await httpResponse.Content.ReadAsStringAsync();
             return JsonSerializer.Deserialize<SourcesResult>(json) ??
                  new SourcesResult();
         }
+
+        
 
         private string GetRoute<T>()
         {

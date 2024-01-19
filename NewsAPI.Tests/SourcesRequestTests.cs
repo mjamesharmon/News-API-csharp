@@ -10,8 +10,6 @@ public class SourcesRequestTest
 {
     private MockHttpMessageHandler? _messageHandler;
 
-
-
     private MockHttpMessageHandler MessageHandler => _messageHandler ??
         throw new NullReferenceException("Message handler not congfigured");
 
@@ -25,7 +23,6 @@ public class SourcesRequestTest
     public async void GetSources_ValidParameters_Ok(SourcesRequest request,
         string expectedUrl)
     {
-
         var newsApi = Arrange();
 
         var response = await newsApi.GetSourcesAsync(request);

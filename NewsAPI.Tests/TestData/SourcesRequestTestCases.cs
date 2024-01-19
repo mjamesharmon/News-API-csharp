@@ -12,7 +12,13 @@ namespace NewsAPI.Tests.TestData
 		{	
 			Add(new SourcesRequest(),
 				$"{_options.BaseAddress}top-headlines/sources");
-		}
+
+			Add(new SourcesRequest()
+			{
+				 Category=Constants.Categories.Business
+			},
+            $"{_options.BaseAddress}top-headlines/sources?category=business");
+        }
 	}
 }
 

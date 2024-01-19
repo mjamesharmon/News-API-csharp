@@ -8,8 +8,10 @@
 
   <ItemGroup>
     <None Remove="Attributes\" />
+    <None Remove="Serialization\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Attributes\" />
+    <Folder Include="Serialization\" />
   </ItemGroup>
 </Project>
