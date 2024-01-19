@@ -9,7 +9,7 @@ namespace NewsAPI.Models
 {
     public class Error
     {
-        public ErrorCodes Code { get; set; }
-        public string Message { get; set; }
+        public ErrorCodes Code { get; set; } = ErrorCodes.UnknownError;
+        public string Message { get; set; } = string.Empty;
     }
 }

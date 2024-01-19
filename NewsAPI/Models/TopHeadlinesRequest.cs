@@ -15,7 +15,7 @@ namespace NewsAPI.Models
         /// <summary>
         /// The keyword or phrase to search for. Boolean operators are supported.
         /// </summary>
-        public string Q { get; set; }
+        public string? Q { get; set; }
         /// <summary>
         /// If you want to restrict the results to specific sources, add their Ids here. You can find source Ids with the /sources endpoint or on newsapi.org.
         /// </summary>

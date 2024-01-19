@@ -11,24 +11,25 @@ namespace NewsAPI
     /// </summary>
     public class NewsApiClient
     {
-        private string BASE_URL = "https://newsapi.org/v2/";
+        private readonly HttpClient _http;
 
-        private HttpClient HttpClient;
-
-        private string ApiKey;
+        public NewsApiClient(HttpClient client, NewsApiClientOptions options)
+        {
+            _http = client;
+            _http.BaseAddress = new Uri(options.BaseAddress);
+            _http.DefaultRequestHeaders.Add("user-agent", "News-API-csharp/1.0");
+            _http.DefaultRequestHeaders.Add("x-api-key", options.ApiKey);
+            _http.Timeout = TimeSpan.FromSeconds(options.TimeoutInSeconds);
+        }
 
         /// <summary>
         /// Use this to get results from NewsAPI.org.
         /// </summary>
         /// <param name="apiKey">Your News API key. You can create one for free at https://newsapi.org.</param>
-        public NewsApiClient(string apiKey)
-        {
-            ApiKey = apiKey;
-
-            HttpClient = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate });
-            HttpClient.DefaultRequestHeaders.Add("user-agent", "News-API-csharp/0.1");
-            HttpClient.DefaultRequestHeaders.Add("x-api-key", ApiKey);
-        }
+        public NewsApiClient(string apiKey) :
+            this(new HttpClient(), new NewsApiClientOptions { ApiKey = apiKey })
+        { }
+     
 
         /// <summary>
         /// Query the /v2/top-headlines endpoint for live top news headlines.
@@ -185,14 +186,15 @@ namespace NewsAPI
             var articlesResult = new ArticlesResult();
 
             // make the http request
-            var httpRequest = new HttpRequestMessage(HttpMethod.Get, BASE_URL + endpoint + "?" + querystring);
-            var httpResponse = await HttpClient.SendAsync(httpRequest);            
+            var httpResponse = await _http.GetAsync(endpoint + "?" + querystring);
 
-            var json = await httpResponse.Content?.ReadAsStringAsync();
+            httpResponse.EnsureSuccessStatusCode();
+            var json = await httpResponse.Content.ReadAsStringAsync();
             if (!string.IsNullOrWhiteSpace(json))
             {
                 // convert the json to an obj
-                var apiResponse = JsonSerializer.Deserialize<ApiResponse>(json);
+                var apiResponse = JsonSerializer.Deserialize<ApiResponse>(json)
+                    ?? throw new InvalidOperationException();
                 articlesResult.Status = apiResponse.Status;
                 if (articlesResult.Status == Statuses.Ok)
                 {
@@ -204,7 +206,8 @@ namespace NewsAPI
                     ErrorCodes errorCode = ErrorCodes.UnknownError;
                     try
                     {
-                        errorCode = (ErrorCodes)apiResponse.Code;
+                        errorCode = apiResponse.Code ??
+                            throw new InvalidOperationException();
                     }
                     catch (Exception)
                     {
