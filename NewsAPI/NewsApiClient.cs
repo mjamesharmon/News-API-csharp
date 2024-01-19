@@ -1,14 +1,8 @@
 ﻿using NewsAPI.Constants;
 using NewsAPI.Models;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace NewsAPI
 {
@@ -91,6 +85,7 @@ namespace NewsAPI
             return await MakeRequest("top-headlines", querystring);
         }
 
+        [Obsolete]
         /// <summary>
         /// Query the /v2/top-headlines endpoint for live top news headlines.
         /// </summary>
@@ -171,6 +166,7 @@ namespace NewsAPI
             return await MakeRequest("everything", querystring);
         }
 
+        [Obsolete]
         /// <summary>
         /// Query the /v2/everything endpoint for recent articles all over the web.
         /// </summary>
@@ -196,7 +192,7 @@ namespace NewsAPI
             if (!string.IsNullOrWhiteSpace(json))
             {
                 // convert the json to an obj
-                var apiResponse = JsonConvert.DeserializeObject<ApiResponse>(json);
+                var apiResponse = JsonSerializer.Deserialize<ApiResponse>(json);
                 articlesResult.Status = apiResponse.Status;
                 if (articlesResult.Status == Statuses.Ok)
                 {
