@@ -30,7 +30,6 @@ public class SourcesRequestTest
         Assert.NotNull(response);
         Assert.Equal(expectedUrl, MessageHandler.RequestedUrl);
         Assert.Equal(Options.ApiKey, MessageHandler.SubmittedApiKey);
-
     }
 
 

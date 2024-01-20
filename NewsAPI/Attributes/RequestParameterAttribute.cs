@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Web;
 using NewsAPI.Serialization;
 
 namespace NewsAPI.Attributes
@@ -22,8 +23,11 @@ namespace NewsAPI.Attributes
 			string value = serializer.Serialize(pi.GetValue(item));
 
 			return (string.IsNullOrWhiteSpace(value)) ? string.Empty :
-				$"{_name}={value}";
+				GetRequestParamterFor(value);
 		}
+
+		private string GetRequestParamterFor(string value) =>
+			HttpUtility.HtmlEncode($"{_name}={value}");
 
 		private IQueryValueSerializer DefaultSerializer =>
 			new StringSerializer();
