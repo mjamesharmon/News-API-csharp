@@ -1,13 +1,34 @@
 ﻿using System;
+using System.Text.Json.Serialization;
 using NewsAPI.Constants;
 
 namespace NewsAPI.Models
 {
-	public class SourcesResult
+	public class SourcesResult : IResponse
 	{
-        public Statuses Status { get; set; }
-        public Error Error { get; set; } = new();
-        public List<Source> Sources { get; set; } = new();
+
+        [JsonPropertyName("status")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public Statuses? Status { get; set; } 
+        [JsonPropertyName("error")]
+        public Error? Error { get; set; }
+        [JsonPropertyName("sources")]
+        public IEnumerable<Source>? Sources { get; set; }
+
+        public static SourcesResult Errored(string? message = null)
+        {          
+            return new SourcesResult
+            {
+                Status = Statuses.Error,
+                Error = DefaultError
+            };
+        }
+
+        private static Error DefaultError => new Error
+        {
+            Code = ErrorCodes.UnknownError,
+            Message = "An unknown error has occured"
+        };
     }
 }
 

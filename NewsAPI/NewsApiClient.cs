@@ -39,25 +39,101 @@ namespace NewsAPI
         /// </summary>
         /// <param name="request"></param>
         /// <returns></returns>
-        public async Task<SourcesResult> GetSourcesAsync(SourcesRequest request)
-        {
-            string route = GetRoute<SourcesRequest>();
+        public async Task<SourcesResult> GetSourcesAsync(SourcesRequest request) {
 
-            var queryString = request.GetType().GetProperties().
+            return await GetResultOrErrorAsync(request,
+                SourcesResult.Errored());
+        }
+
+        private async Task<TResult> GetResultOrErrorAsync<TRequest,TResult>(
+            TRequest request, TResult defaultError)
+            where TResult : IResponse
+        {
+            string path = GetPath(
+                GetRoute<TRequest>(),
+                GetQuery(request));
+
+            var httpResponse = await _http.GetAsync(path);
+            return await ParseResultOrError(httpResponse, defaultError);
+        }
+
+        private async Task<TResult>
+            ParseResultOrError<TResult>(HttpResponseMessage httpResponse,
+            TResult result)
+            where TResult : IResponse
+        {
+            return (httpResponse.IsSuccessStatusCode) ?
+               await HttpSuccess(httpResponse, result) :
+               ApplyErrorResponse(httpResponse, result);
+        }
+
+        private async Task<TResult> HttpSuccess<TResult>(
+            HttpResponseMessage message, TResult result)
+            where TResult : IResponse
+        {
+            string json = await message.Content.ReadAsStringAsync();
+            var response = JsonSerializer.Deserialize<ApiResponse>(json);
+
+            return (response != null &&
+                response.Status == Statuses.Ok) ? Ok(json, result) :
+                ApiError(response, result);
+        }   
+
+        private TResult ApiError<TResult>(
+          ApiResponse? response,
+          TResult result)
+          where TResult : IResponse
+        {
+            response ??= new ApiResponse
+            {
+                Code = ErrorCodes.UnknownError,
+                Message = "An unknown error has occured"
+            };
+
+            result.Error = new Error();
+            result.Error.Code = response.Code ?? ErrorCodes.UnknownError;
+            result.Error.Message = response.Message;
+            return result;
+        }
+
+        private TResult Ok<TResult>(
+           string json,
+           TResult result)
+           where TResult : IResponse
+        {
+            return JsonSerializer.Deserialize<TResult>(json) ??
+                result;
+        }
+
+        private TResult ApplyErrorResponse<TResult>(
+            HttpResponseMessage httpResponse,
+            TResult result)
+            where TResult : IResponse
+        {
+            result.Status = Statuses.Error;
+            result.Error = new Error
+            {
+                Code = ErrorCodes.UnexpectedError,
+                Message = httpResponse.ReasonPhrase ?? "Unknown failure"
+            };
+            return result;
+        }
+
+
+        private string GetPath(string route, string? query) =>
+            (string.IsNullOrWhiteSpace(query)) ?
+                route : $"{route}?{query}";
+
+        private string? GetQuery<T>(T? request)
+        {
+
+            return (request == null) ? string.Empty :
+                request.GetType().
+                GetProperties().
                 Aggregate(new QueryParametersBuilder(), (builder, property) =>
                     builder.AppendParameter(request, property)).
                     ToString();
-            string path = (string.IsNullOrWhiteSpace(queryString)) ?
-                route : $"{route}?{queryString}";
-           
-           var httpResponse = await _http.GetAsync(path);
-           httpResponse.EnsureSuccessStatusCode();
-           var json = await httpResponse.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<SourcesResult>(json) ??
-                 new SourcesResult();
         }
-
-        
 
         private string GetRoute<T>()
         {

@@ -3,13 +3,19 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace NewsAPI.Models
 {
     public class Error
     {
-        public ErrorCodes Code { get; set; } = ErrorCodes.UnknownError;
-        public string Message { get; set; } = string.Empty;
+
+        [JsonPropertyName("code")]
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public ErrorCodes Code { get; set; } 
+
+        [JsonPropertyName("message")]
+        public string? Message { get; set; } 
     }
 }

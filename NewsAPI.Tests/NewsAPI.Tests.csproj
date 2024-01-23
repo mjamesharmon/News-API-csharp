@@ -33,4 +33,12 @@
   <ItemGroup>
     <ProjectReference Include="..\NewsAPI\NewsAPI.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="TestData\valid_sources_response.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="TestData\error_code_response.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

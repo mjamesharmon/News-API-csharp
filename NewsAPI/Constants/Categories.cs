@@ -2,7 +2,6 @@
 
 namespace NewsAPI.Constants
 {
-    [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum Categories
     {
         Business,
@@ -10,6 +9,7 @@ namespace NewsAPI.Constants
         Health,
         Science,
         Sports,
-        Technology
+        Technology,
+        General
     }
 }

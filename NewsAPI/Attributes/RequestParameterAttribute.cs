@@ -33,8 +33,7 @@ namespace NewsAPI.Attributes
 			new StringSerializer();
 
 		private Type TypeOfDefaultSerializer
-		 => typeof(StringSerializer);
-		
+		 => typeof(StringSerializer);	
 	}
 }
 
