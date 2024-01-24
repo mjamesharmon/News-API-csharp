@@ -12,7 +12,7 @@ namespace NewsAPI.Models
     {
         [JsonPropertyName("status")]
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public Statuses Status { get; set; }
+        public Statuses Status { get; set; } = Statuses.Error;
         [JsonPropertyName("code")]
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ErrorCodes? Code { get; set; }

@@ -63,49 +63,42 @@ namespace NewsAPI
             where TResult : IResponse
         {
             return (httpResponse.IsSuccessStatusCode) ?
-               await HttpSuccess(httpResponse, result) :
-               ApplyErrorResponse(httpResponse, result);
+               await OnHttpSuccess(httpResponse, result) :
+               OnHttpError(httpResponse, result);
         }
 
-        private async Task<TResult> HttpSuccess<TResult>(
+        private async Task<TResult> OnHttpSuccess<TResult>(
             HttpResponseMessage message, TResult result)
             where TResult : IResponse
         {
             string json = await message.Content.ReadAsStringAsync();
-            var response = JsonSerializer.Deserialize<ApiResponse>(json);
+            ApiResponse response = JsonSerializer.Deserialize<ApiResponse>(json) ??
+                throw new InvalidOperationException();
 
-            return (response != null &&
-                response.Status == Statuses.Ok) ? Ok(json, result) :
-                ApiError(response, result);
+            return (response.Status == Statuses.Ok) ?
+                OnApiSuccess<TResult>(json) :
+                OnApiError(response, result);
         }   
 
-        private TResult ApiError<TResult>(
-          ApiResponse? response,
+        private TResult OnApiError<TResult>(
+          ApiResponse response,
           TResult result)
           where TResult : IResponse
-        {
-            response ??= new ApiResponse
-            {
-                Code = ErrorCodes.UnknownError,
-                Message = "An unknown error has occured"
-            };
-
+        {  
             result.Error = new Error();
             result.Error.Code = response.Code ?? ErrorCodes.UnknownError;
             result.Error.Message = response.Message;
             return result;
         }
 
-        private TResult Ok<TResult>(
-           string json,
-           TResult result)
+        private TResult OnApiSuccess<TResult>(string json)
            where TResult : IResponse
         {
             return JsonSerializer.Deserialize<TResult>(json) ??
-                result;
+               throw new InvalidOperationException();
         }
 
-        private TResult ApplyErrorResponse<TResult>(
+        private TResult OnHttpError<TResult>(
             HttpResponseMessage httpResponse,
             TResult result)
             where TResult : IResponse

@@ -66,6 +66,19 @@ public class SourcesRequestTest
         Assert.Equal(expectedError, response.Error.Code);
     }
 
+    [Theory]
+    [ClassData(typeof(InvalidSourcesResultTestCases))]
+    public async Task GetSources_InvalidJson_ThrowsException(string payload,
+        Type expectedType)
+    {
+        var newsApi = ArrangeWithJsonResponse(payload);
+        var request = new SourcesRequest();
+
+     await Assert.ThrowsAsync(expectedType, async () =>
+             await newsApi.GetSourcesAsync(request));
+   
+    }
+
     private NewsApiClient ArrangeWithJsonResponse(string json)
     {
         _messageHandler = new((request =>
