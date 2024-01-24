@@ -1,10 +1,12 @@
-﻿using System;
-using NewsAPI.Attributes;
+﻿using NewsAPI.Attributes;
 using NewsAPI.Constants;
 using NewsAPI.Serialization;
 
 namespace NewsAPI.Models
 {
+    /// <summary>
+    /// Params for making a request to the /top-headlines/sources endpoint.
+    /// </summary>
 	[Route("top-headlines/sources")]
 	public sealed class SourcesRequest
 	{
