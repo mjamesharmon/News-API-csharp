@@ -9,18 +9,9 @@ using NewsAPI.Constants;
 
 namespace NewsAPI.Tests;
 
-public class SourcesRequestTest
+public class SourcesTest : NewsApiTest
 {
-    private MockHttpMessageHandler? _messageHandler;
-
-    private MockHttpMessageHandler MessageHandler => _messageHandler ??
-        throw new NullReferenceException("Message handler not congfigured");
-
-    private static NewsApiClientOptions Options => new NewsApiClientOptions
-    {
-        ApiKey = "testkey"
-    };
-
+    
     [Theory]
     [ClassData(typeof(SourcesRequestTestCases))]
     public async Task GetSources_ValidParameters_Ok(SourcesRequest request,
@@ -45,8 +36,7 @@ public class SourcesRequestTest
         var response = await newsApi.GetSourcesAsync(request);
 
         Assert.NotNull(response);
-        Assert.Equal("Ok", response.Status.ToString());
-      
+        Assert.Equal("Ok", response.Status.ToString());  
     }
 
     [Theory]
@@ -78,28 +68,4 @@ public class SourcesRequestTest
              await newsApi.GetSourcesAsync(request));
    
     }
-
-    private NewsApiClient ArrangeWithJsonResponse(string json)
-    {
-        _messageHandler = new((request =>
-        {
-            var response = new HttpResponseMessage(HttpStatusCode.OK);
-            response.Content = new StringContent(json);
-            return response;
-        }));
-        HttpClient client = new HttpClient(_messageHandler);
-        return new NewsApiClient(client, Options);
-    }
-
-    private NewsApiClient Arrange()
-    {
-        return ArrangeWithJsonResponse(
-            JsonSerializer.Serialize(new SourcesResult(),SerializationOptions));     
-    }
-
-    private JsonSerializerOptions SerializationOptions => new()
-    {
-        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-    };
-
 }
