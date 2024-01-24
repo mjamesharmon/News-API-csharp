@@ -1,4 +1,6 @@
-﻿using NewsAPI.Attributes;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
+using NewsAPI.Attributes;
 using NewsAPI.Constants;
 using NewsAPI.Serialization;
 
@@ -53,12 +55,12 @@ namespace NewsAPI.Models
         /// <summary>
         /// Each request returns a fixed amount of results. Page through them by increasing this.
         /// </summary>
-        [RequestParameter("page")]
+        [RequestParameter("page", typeof(IntegerValueSerializer))]
         public int? Page { get; set; }
         /// <summary>
         /// Set the max number of results to retrieve per request. The max is 100.
         /// </summary>
-        [RequestParameter("pageSize")]
+        [RequestParameter("pageSize",typeof(IntegerValueSerializer))]
         public int? PageSize { get; set; }
     }
 }

@@ -10,27 +10,19 @@ namespace NewsAPI.Tests.TestData
         private NewsApiClientOptions _options = new();
 
         public TopHeadlinesTestCases()
-		{
-            Add(new TopHeadlinesRequest(),
-                       ComposeQueryWith());
+		{ 
+            AddComplextTest();
+            AddCountriesTest();
+            AddLanguagesTest();
+            AddCategoryTest();
+            AddSimpleTest();
+            AddSourcesTest();
+            AddPagingTest();
+            AddPageSizeTest();
+        }
 
-            Add(new TopHeadlinesRequest()
-            {
-                Category = Constants.Categories.Business
-            },
-            ComposeQueryWith("category=business"));
 
-            Add(new TopHeadlinesRequest()
-            {
-                Language = Constants.Languages.EN
-            },
-            ComposeQueryWith("language=en"));
-            
-            Add(new TopHeadlinesRequest()
-            {
-                Country = Constants.Countries.US
-            },
-            $"{_options.BaseAddress}top-headlines?country=us");
+        private void AddComplextTest() {
 
             Add(new TopHeadlinesRequest()
             {
@@ -40,7 +32,51 @@ namespace NewsAPI.Tests.TestData
             },
                 ComposeQueryWith("category=business&language=en&country=us"));
 
-            AddSourcesTest();
+        }
+        private void AddCountriesTest() {
+             Add(new TopHeadlinesRequest()
+            {
+                Country = Constants.Countries.US
+            },
+            $"{_options.BaseAddress}top-headlines?country=us");
+        }
+
+        private void AddLanguagesTest() {
+             Add(new TopHeadlinesRequest()
+            {
+                Language = Constants.Languages.EN
+            },
+            ComposeQueryWith("language=en"));
+        }
+
+
+        private void AddCategoryTest() {
+             Add(new TopHeadlinesRequest()
+            {
+                Category = Constants.Categories.Business
+            },
+            ComposeQueryWith("category=business"));
+        }
+
+        private void AddSimpleTest() {
+            Add(new TopHeadlinesRequest(),
+                       ComposeQueryWith());
+        }
+
+        private void AddPagingTest() {
+            var request = new TopHeadlinesRequest {
+                 Page=4
+            };
+
+            Add(request, ComposeQueryWith("page=4"));
+        }
+
+        private void AddPageSizeTest() {
+             var request = new TopHeadlinesRequest {
+                PageSize=25
+            };
+
+            Add(request, ComposeQueryWith("pageSize=25"));
         }
 
         private void AddSourcesTest()
