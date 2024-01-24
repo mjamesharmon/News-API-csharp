@@ -5,6 +5,7 @@ using NewsAPI.Serialization;
 
 namespace NewsAPI.Attributes
 {
+	[AttributeUsage(AttributeTargets.Property)]
 	internal class RequestParameterAttribute : Attribute
 	{
 		private readonly string _name;

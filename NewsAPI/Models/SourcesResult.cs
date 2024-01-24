@@ -4,7 +4,7 @@ using NewsAPI.Constants;
 
 namespace NewsAPI.Models
 {
-	public class SourcesResult : IResponse
+	public sealed class SourcesResult : IResponse
 	{
 
         [JsonPropertyName("status")]

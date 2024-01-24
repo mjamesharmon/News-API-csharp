@@ -112,7 +112,6 @@ namespace NewsAPI
             return result;
         }
 
-
         private string GetPath(string route, string? query) =>
             (string.IsNullOrWhiteSpace(query)) ?
                 route : $"{route}?{query}";
