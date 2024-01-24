@@ -1,13 +1,18 @@
 ﻿using System;
 namespace NewsAPI.Serialization
 {
-	public class ListSerializer<T> : IQueryValueSerializer
+	internal class ListSerializer<T> : IQueryValueSerializer
 	{
 
         public string Serialize(object? element)
         {
-            throw new NotImplementedException();
+            var list = GetEnumerable(element);
+           return string.Join(",", list);
         }
+
+        private IEnumerable<T> GetEnumerable(object? element) =>
+            (element is null) ? Enumerable.Empty<T>() :
+                element as List<T> ?? Enumerable.Empty<T>();
     }
 }
 

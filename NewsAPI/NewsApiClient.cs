@@ -45,150 +45,17 @@ namespace NewsAPI
                 SourcesResult.Errored());
         }
 
-        private async Task<TResult> GetResultOrErrorAsync<TRequest,TResult>(
-            TRequest request, TResult defaultError)
-            where TResult : IResponse
-        {
-            string path = GetPath(
-                GetRoute<TRequest>(),
-                GetQuery(request));
-
-            var httpResponse = await _http.GetAsync(path);
-            return await ParseResultOrError(httpResponse, defaultError);
-        }
-
-        private async Task<TResult>
-            ParseResultOrError<TResult>(HttpResponseMessage httpResponse,
-            TResult result)
-            where TResult : IResponse
-        {
-            return (httpResponse.IsSuccessStatusCode) ?
-               await OnHttpSuccess(httpResponse, result) :
-               OnHttpError(httpResponse, result);
-        }
-
-        private async Task<TResult> OnHttpSuccess<TResult>(
-            HttpResponseMessage message, TResult result)
-            where TResult : IResponse
-        {
-            string json = await message.Content.ReadAsStringAsync();
-            ApiResponse response = JsonSerializer.Deserialize<ApiResponse>(json) ??
-                throw new InvalidOperationException();
-
-            return (response.Status == Statuses.Ok) ?
-                OnApiSuccess<TResult>(json) :
-                OnApiError(response, result);
-        }   
-
-        private TResult OnApiError<TResult>(
-          ApiResponse response,
-          TResult result)
-          where TResult : IResponse
-        {  
-            result.Error = new Error();
-            result.Error.Code = response.Code ?? ErrorCodes.UnknownError;
-            result.Error.Message = response.Message;
-            return result;
-        }
-
-        private TResult OnApiSuccess<TResult>(string json)
-           where TResult : IResponse
-        {
-            return JsonSerializer.Deserialize<TResult>(json) ??
-               throw new InvalidOperationException();
-        }
-
-        private TResult OnHttpError<TResult>(
-            HttpResponseMessage httpResponse,
-            TResult result)
-            where TResult : IResponse
-        {
-            result.Status = Statuses.Error;
-            result.Error = new Error
-            {
-                Code = ErrorCodes.UnexpectedError,
-                Message = httpResponse.ReasonPhrase ?? "Unknown failure"
-            };
-            return result;
-        }
-
-        private string GetPath(string route, string? query) =>
-            (string.IsNullOrWhiteSpace(query)) ?
-                route : $"{route}?{query}";
-
-        private string? GetQuery<T>(T? request)
-        {
-
-            return (request == null) ? string.Empty :
-                request.GetType().
-                GetProperties().
-                Aggregate(new QueryParametersBuilder(), (builder, property) =>
-                    builder.AppendParameter(request, property)).
-                    ToString();
-        }
-
-        private string GetRoute<T>()
-        {
-           RouteAttribute? routing = Attribute.GetCustomAttribute(typeof(T),
-                typeof(RouteAttribute)) as RouteAttribute;
-
-            return (routing == null) ? string.Empty :
-                routing.Route;
-        }
-
+     
         /// <summary>
         /// Query the /v2/top-headlines endpoint for live top news headlines.
         /// </summary>
         /// <param name="request">The params and filters for the request.</param>
         /// <returns></returns>
-        public async Task<ArticlesResult> GetTopHeadlinesAsync(TopHeadlinesRequest request)
+        public async Task<ArticlesResult> GetTopHeadlinesAsync(
+            TopHeadlinesRequest request)
         {
-            // build the querystring
-            var queryParams = new List<string>();
-
-            // q
-            if (!string.IsNullOrWhiteSpace(request.Q))
-            {
-                queryParams.Add("q=" + request.Q);
-            }
-
-            // sources
-            if (request.Sources.Count > 0)
-            {
-                queryParams.Add("sources=" + string.Join(",", request.Sources));
-            }
-
-            if (request.Category.HasValue)
-            {
-                queryParams.Add("category=" + request.Category.Value.ToString().ToLowerInvariant());
-            }
-
-            if (request.Language.HasValue)
-            {
-                queryParams.Add("language=" + request.Language.Value.ToString().ToLowerInvariant());
-            }
-
-            if (request.Country.HasValue)
-            {
-                queryParams.Add("country=" + request.Country.Value.ToString().ToLowerInvariant());
-            }
-
-            // page
-            if (request.Page > 1)
-            {
-                queryParams.Add("page=" + request.Page);
-            }
-
-            // page size
-            if (request.PageSize > 0)
-            {
-                queryParams.Add("pageSize=" + request.PageSize);
-            }
-
-            // join them together
-            var querystring = string.Join("&", queryParams.ToArray());
-
-            return await MakeRequest("top-headlines", querystring);
+            return await GetResultOrErrorAsync(request,
+                new ArticlesResult());     
         }
 
         [Obsolete]
@@ -337,6 +204,97 @@ namespace NewsAPI
             }
 
             return articlesResult;
+        }
+
+        private async Task<TResult> GetResultOrErrorAsync<TRequest, TResult>(
+    TRequest request, TResult defaultError)
+    where TResult : IResponse
+        {
+            string path = GetPath(
+                GetRoute<TRequest>(),
+                GetQuery(request));
+
+            var httpResponse = await _http.GetAsync(path);
+            return await ParseResultOrError(httpResponse, defaultError);
+        }
+
+        private async Task<TResult>
+            ParseResultOrError<TResult>(HttpResponseMessage httpResponse,
+            TResult result)
+            where TResult : IResponse
+        {
+            return (httpResponse.IsSuccessStatusCode) ?
+               await OnHttpSuccess(httpResponse, result) :
+               OnHttpError(httpResponse, result);
+        }
+
+        private async Task<TResult> OnHttpSuccess<TResult>(
+            HttpResponseMessage message, TResult result)
+            where TResult : IResponse
+        {
+            string json = await message.Content.ReadAsStringAsync();
+            ApiResponse response = JsonSerializer.Deserialize<ApiResponse>(json) ??
+                throw new InvalidOperationException();
+
+            return (response.Status == Statuses.Ok) ?
+                OnApiSuccess<TResult>(json) :
+                OnApiError(response, result);
+        }
+
+        private TResult OnApiError<TResult>(
+          ApiResponse response,
+          TResult result)
+          where TResult : IResponse
+        {
+            result.Error = new Error();
+            result.Error.Code = response.Code ?? ErrorCodes.UnknownError;
+            result.Error.Message = response.Message;
+            return result;
+        }
+
+        private TResult OnApiSuccess<TResult>(string json)
+           where TResult : IResponse
+        {
+            return JsonSerializer.Deserialize<TResult>(json) ??
+               throw new InvalidOperationException();
+        }
+
+        private TResult OnHttpError<TResult>(
+            HttpResponseMessage httpResponse,
+            TResult result)
+            where TResult : IResponse
+        {
+            result.Status = Statuses.Error;
+            result.Error = new Error
+            {
+                Code = ErrorCodes.UnexpectedError,
+                Message = httpResponse.ReasonPhrase ?? "Unknown failure"
+            };
+            return result;
+        }
+
+        private string GetPath(string route, string? query) =>
+            (string.IsNullOrWhiteSpace(query)) ?
+                route : $"{route}?{query}";
+
+        private string? GetQuery<T>(T? request)
+        {
+
+            return (request == null) ? string.Empty :
+                request.GetType().
+                GetProperties().
+                Aggregate(new QueryParametersBuilder(), (builder, property) =>
+                    builder.AppendParameter(request, property)).
+                    ToString();
+        }
+
+        private string GetRoute<T>()
+        {
+            RouteAttribute? routing = Attribute.GetCustomAttribute(typeof(T),
+                 typeof(RouteAttribute)) as RouteAttribute;
+
+            return (routing == null) ? string.Empty :
+                routing.Route;
         }
     }
 }

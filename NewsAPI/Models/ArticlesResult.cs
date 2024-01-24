@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace NewsAPI.Models
 {
-    public class ArticlesResult
+    public class ArticlesResult : IResponse
     {
-        public Statuses Status { get; set; }
+        public Statuses? Status { get; set; }
         public Error Error { get; set; } = new();
         public int TotalResults { get; set; }
         public List<Article> Articles { get; set; } = new();
