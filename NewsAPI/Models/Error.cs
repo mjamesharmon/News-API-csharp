@@ -16,6 +16,12 @@ namespace NewsAPI.Models
         public ErrorCodes Code { get; set; } 
 
         [JsonPropertyName("message")]
-        public string? Message { get; set; } 
+        public string? Message { get; set; }
+
+        internal static Error DefaultError => new Error
+        {
+            Code = ErrorCodes.UnknownError,
+            Message = "An unknown error has occured."
+        };
     }
 }

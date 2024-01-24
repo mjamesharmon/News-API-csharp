@@ -20,15 +20,9 @@ namespace NewsAPI.Models
             return new SourcesResult
             {
                 Status = Statuses.Error,
-                Error = DefaultError
+                Error = Error.DefaultError
             };
         }
-
-        private static Error DefaultError => new Error
-        {
-            Code = ErrorCodes.UnknownError,
-            Message = "An unknown error has occured"
-        };
     }
 }
 
