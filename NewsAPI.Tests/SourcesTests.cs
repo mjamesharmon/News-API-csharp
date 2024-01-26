@@ -40,7 +40,7 @@ public class SourcesTest : NewsApiTest
     }
 
     [Theory]
-    [ClassData(typeof(ErroredSourcesResultTestCases))]
+    [ClassData(typeof(ErroredResultTestCases))]
     public async Task GetSources_ErrorResponse_Ok(string payload,
         ErrorCodes expectedError )
     {

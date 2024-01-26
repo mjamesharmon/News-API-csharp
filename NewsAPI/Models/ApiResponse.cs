@@ -18,7 +18,5 @@ namespace NewsAPI.Models
         public ErrorCodes? Code { get; set; }
         [JsonPropertyName("message")]
         public string Message { get; set; } = string.Empty;
-        public List<Article> Articles { get; set; } = new();
-        public int TotalResults { get; set; }
     }
 }

@@ -170,8 +170,7 @@ namespace NewsAPI
                 articlesResult.Status = apiResponse.Status;
                 if (articlesResult.Status == Statuses.Ok)
                 {
-                    articlesResult.TotalResults = apiResponse.TotalResults;
-                    articlesResult.Articles = apiResponse.Articles;
+                  
                 }
                 else
                 {
