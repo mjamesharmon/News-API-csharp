@@ -85,7 +85,7 @@ namespace NewsAPI.Tests.TestData
             request.Sources.Add("techcrunch");
             request.Sources.Add("cnn");
 
-            Add(request, ComposeQueryWith("sources=techcrunch,cnn"));
+            Add(request, ComposeQueryWith("sources=techcrunch%2ccnn"));
         }
 
         private string ComposeQueryWith(string? parameters = null) =>

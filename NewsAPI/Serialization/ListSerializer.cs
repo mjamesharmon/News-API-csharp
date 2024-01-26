@@ -7,7 +7,7 @@ namespace NewsAPI.Serialization
         public string Serialize(object? element)
         {
             var list = GetEnumerable(element);
-           return string.Join(",", list);
+            return string.Join(",", list).ToLowerInvariant();
         }
 
         private IEnumerable<T> GetEnumerable(object? element) =>

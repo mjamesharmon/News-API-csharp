@@ -28,13 +28,16 @@ namespace NewsAPI.Attributes
 		}
 
 		private string GetRequestParamterFor(string value) =>
-			HttpUtility.HtmlEncode($"{_name}={value}");
+			$"{_name}={Encode(value)}";
 
 		private IQueryValueSerializer DefaultSerializer =>
 			new StringSerializer();
 
 		private Type TypeOfDefaultSerializer
-		 => typeof(StringSerializer);	
+		 => typeof(StringSerializer);
+
+		private string Encode(string value) =>
+			HttpUtility.UrlEncode(value);
 	}
 }
 
