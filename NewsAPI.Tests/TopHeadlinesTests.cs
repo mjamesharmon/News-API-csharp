@@ -23,7 +23,7 @@ namespace NewsAPI.Tests
         }
 
         [Theory]
-        [ClassData(typeof(ValidTopHeadlinesResultTestCases))]
+        [ClassData(typeof(ValidArticlesResultTestCases))]
         public async Task TopHeadlines_ValidResponse_Ok(string payload)
         {
             var newsApi = ArrangeWithJsonResponse(payload);

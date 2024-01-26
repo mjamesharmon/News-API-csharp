@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Runtime.CompilerServices;
-using NewsAPI.Attributes;
+﻿using NewsAPI.Attributes;
 using NewsAPI.Constants;
 using NewsAPI.Serialization;
 

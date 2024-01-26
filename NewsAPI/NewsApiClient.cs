@@ -76,67 +76,8 @@ namespace NewsAPI
         /// <returns></returns>
         public async Task<ArticlesResult> GetEverythingAsync(EverythingRequest request)
         {
-            // build the querystring
-            var queryParams = new List<string>();
-
-            // q
-            if (!string.IsNullOrWhiteSpace(request.Q))
-            {
-                queryParams.Add("q=" + request.Q);
-            }
-
-            // sources
-            if (request.Sources.Count > 0)
-            {
-                queryParams.Add("sources=" + string.Join(",", request.Sources));
-            }
-
-            // domains
-            if (request.Domains.Count > 0)
-            {
-                queryParams.Add("domains=" + string.Join(",", request.Sources));
-            }
-
-            // from
-            if (request.From.HasValue)
-            {
-                queryParams.Add("from=" + string.Format("{0:s}", request.From.Value));
-            }
-
-            // to
-            if (request.To.HasValue)
-            {
-                queryParams.Add("to=" + string.Format("{0:s}", request.To.Value));
-            }
-
-            // language
-            if (request.Language.HasValue)
-            {
-                queryParams.Add("language=" + request.Language.Value.ToString().ToLowerInvariant());
-            }
-
-            // sortBy
-            if (request.SortBy.HasValue)
-            {
-                queryParams.Add("sortBy=" + request.SortBy.Value.ToString());
-            }
-
-            // page
-            if (request.Page > 1)
-            {
-                queryParams.Add("page=" + request.Page);
-            }
-
-            // page size
-            if (request.PageSize > 0)
-            {
-                queryParams.Add("pageSize=" + request.PageSize);
-            }
-
-            // join them together
-            var querystring = string.Join("&", queryParams.ToArray());
-
-            return await MakeRequest("everything", querystring);
+            return await GetResultOrErrorAsync(request,
+                ArticlesResult.Errored());
         }
 
         [Obsolete]
@@ -151,59 +92,6 @@ namespace NewsAPI
         }
 
         // ***
-
-        private async Task<ArticlesResult> MakeRequest(string endpoint, string querystring)
-        {
-            // here's the return obj
-            var articlesResult = new ArticlesResult();
-
-            // make the http request
-            var httpResponse = await _http.GetAsync(endpoint + "?" + querystring);
-
-            httpResponse.EnsureSuccessStatusCode();
-            var json = await httpResponse.Content.ReadAsStringAsync();
-            if (!string.IsNullOrWhiteSpace(json))
-            {
-                // convert the json to an obj
-                var apiResponse = JsonSerializer.Deserialize<ApiResponse>(json)
-                    ?? throw new InvalidOperationException();
-                articlesResult.Status = apiResponse.Status;
-                if (articlesResult.Status == Statuses.Ok)
-                {
-                  
-                }
-                else
-                {
-                    ErrorCodes errorCode = ErrorCodes.UnknownError;
-                    try
-                    {
-                        errorCode = apiResponse.Code ??
-                            throw new InvalidOperationException();
-                    }
-                    catch (Exception)
-                    {
-                        Debug.WriteLine("The API returned an error code that wasn't expected: " + apiResponse.Code);
-                    }
-
-                    articlesResult.Error = new Error
-                    {
-                        Code = errorCode,
-                        Message = apiResponse.Message
-                    };
-                }
-            }
-            else
-            {
-                articlesResult.Status = Statuses.Error;
-                articlesResult.Error = new Error
-                {
-                    Code = ErrorCodes.UnexpectedError,
-                    Message = "The API returned an empty response. Are you connected to the internet?"
-                };
-            }
-
-            return articlesResult;
-        }
 
         private async Task<TResult> GetResultOrErrorAsync<TRequest, TResult>(
     TRequest request, TResult defaultError)
