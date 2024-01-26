@@ -19,5 +19,14 @@ namespace NewsAPI.Models
         public int TotalResults { get; set; }
         [JsonPropertyName("articles")]
         public List<Article>? Articles { get; set; }
+
+        public static ArticlesResult Errored(string? message = null)
+        {
+            return new ArticlesResult
+            {
+                Status = Statuses.Error,
+                Error = Error.DefaultError
+            };
+        }
     }
 }

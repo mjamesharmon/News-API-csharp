@@ -10,7 +10,7 @@ namespace NewsAPI.Models
     public class Article
     {
         [JsonPropertyName("source")]
-        public Source? Source { get; set; }
+        public SourceId? Source { get; set; }
         [JsonPropertyName("author")]
         public string? Author { get; set; }
         [JsonPropertyName("title")]

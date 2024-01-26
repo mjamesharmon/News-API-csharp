@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace NewsAPI.Models
 {
-	public abstract class SourceId
+	public sealed class SourceId
 	{
         [JsonPropertyName("id")]
         public string? Id { get; set; } 

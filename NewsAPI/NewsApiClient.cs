@@ -55,7 +55,7 @@ namespace NewsAPI
             TopHeadlinesRequest request)
         {
             return await GetResultOrErrorAsync(request,
-                new ArticlesResult());     
+                ArticlesResult.Errored());    
         }
 
         [Obsolete]

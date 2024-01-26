@@ -10,7 +10,7 @@ namespace NewsAPI.Models
     /// Params for making a request to the /top-headlines endpoint.
     /// </summary>
     [Route("top-headlines")]
-    public class TopHeadlinesRequest
+    public sealed class TopHeadlinesRequest
     {
         /// <summary>
         /// The keyword or phrase to search for. Boolean operators are supported.

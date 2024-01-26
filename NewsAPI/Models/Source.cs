@@ -8,8 +8,12 @@ using NewsAPI.Constants;
 
 namespace NewsAPI.Models
 {
-    public sealed class Source : SourceId
+    public sealed class Source 
     {
+        [JsonPropertyName("id")]
+        public string? Id { get; set; }
+        [JsonPropertyName("name")]
+        public string? Name { get; set; }
         [JsonPropertyName("description")]
         public string? Description { get; set; } 
         [JsonPropertyName("url")]
