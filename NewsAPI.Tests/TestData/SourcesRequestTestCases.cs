@@ -1,4 +1,5 @@
 ﻿using System;
+using NewsAPI.Constants;
 using NewsAPI.Models;
 using Xunit;
 namespace NewsAPI.Tests.TestData 
@@ -21,7 +22,7 @@ namespace NewsAPI.Tests.TestData
 
 			Add(new SourcesRequest()
 			{
-				Language = Constants.Languages.EN
+				Language = Language.EN
 			},
 			$"{_options.BaseAddress}top-headlines/sources?language=en");
 
@@ -34,7 +35,7 @@ namespace NewsAPI.Tests.TestData
             Add(new SourcesRequest()
             {
                 Category = Constants.Categories.Business,
-                Language = Constants.Languages.EN,
+                Language = Language.EN,
                 Country = Constants.Countries.US
             },
         $"{_options.BaseAddress}top-headlines/sources?" +

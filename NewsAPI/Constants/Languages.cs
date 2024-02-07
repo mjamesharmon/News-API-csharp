@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NewsAPI.Constants
 {
-    public enum Languages
+    internal enum Languages
     {
         /// <summary>
         /// Afrikaans (South Africa)

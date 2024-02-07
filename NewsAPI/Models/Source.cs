@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using NewsAPI.Constants;
+using NewsAPI.Serialization;
 
 namespace NewsAPI.Models
 {
@@ -22,8 +23,8 @@ namespace NewsAPI.Models
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Categories? Category { get; set; } 
         [JsonPropertyName("language")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
-        public Languages? Language { get; set; }
+        [JsonConverter(typeof(JsonStringLanguageConverter))]
+        public Language? Language { get; set; }
         [JsonPropertyName("country")]
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public Countries? Country { get; set; } 

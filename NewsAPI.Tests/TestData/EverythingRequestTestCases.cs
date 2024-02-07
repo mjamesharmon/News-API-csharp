@@ -24,7 +24,7 @@ namespace NewsAPI.Tests.TestData
             Add(new EverythingRequest()
             {
                 Query = "example search query",
-                Language = Constants.Languages.EN,
+                Language = Language.EN,
                 Page = 1,
                 PageSize = 20
             },
@@ -35,7 +35,7 @@ namespace NewsAPI.Tests.TestData
         {
             Add(new EverythingRequest()
             {
-                Language = Languages.ES,
+                Language = Language.ES,
                 SortBy = SortBys.Popularity
             },
             ComposeQueryWith("language=es&sortBy=popularity"));
@@ -48,7 +48,7 @@ namespace NewsAPI.Tests.TestData
                 Query="advanced query",
                 From = DateTime.Parse("2022-01-01"),
                 To = DateTime.Parse("2022-12-31"),
-                Language = Constants.Languages.FR,
+                Language = Language.FR,
                 SortBy = SortBys.Relevancy,
                 Page = 2,
                 PageSize = 30

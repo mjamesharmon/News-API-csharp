@@ -71,8 +71,8 @@ namespace NewsAPI.Models
         /// <summary>
         /// The language to restrict articles to.
         /// </summary>
-        [RequestParameter("language", typeof(EnumValueSerializer))]
-        public Languages? Language { get; set; }
+        [RequestParameter("language", typeof(LanguageValueSerializer))]
+        public Language? Language { get; set; }
         /// <summary>
         /// How should the results be sorted? Relevancy =
         /// articles relevant to the Q param come first.

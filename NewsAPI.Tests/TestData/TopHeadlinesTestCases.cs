@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using NewsAPI.Constants;
 using NewsAPI.Models;
 
 namespace NewsAPI.Tests.TestData
@@ -27,7 +28,7 @@ namespace NewsAPI.Tests.TestData
             Add(new TopHeadlinesRequest()
             {
                 Category = Constants.Categories.Business,
-                Language = Constants.Languages.EN,
+                Language = Language.EN,
                 Country = Constants.Countries.US
             },
                 ComposeQueryWith("category=business&language=en&country=us"));
@@ -44,7 +45,7 @@ namespace NewsAPI.Tests.TestData
         private void AddLanguagesTest() {
              Add(new TopHeadlinesRequest()
             {
-                Language = Constants.Languages.EN
+                Language = Language.EN
             },
             ComposeQueryWith("language=en"));
         }

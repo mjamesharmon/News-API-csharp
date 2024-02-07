@@ -43,8 +43,8 @@ namespace NewsAPI.Models
         /// <summary>
         /// The language to restrict articles to.
         /// </summary>
-        [RequestParameter("language", typeof(EnumValueSerializer))]
-        public Languages? Language { get; set; }
+        [RequestParameter("language", typeof(LanguageValueSerializer))]
+        public Language? Language { get; set; }
         /// <summary>
         /// The country of the source to restrict articles to.
         /// </summary>
