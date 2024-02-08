@@ -29,7 +29,7 @@ namespace NewsAPI.Tests.TestData
             {
                 Category = Category.Business,
                 Language = Language.EN,
-                Country = Constants.Countries.US
+                Country = Country.US
             },
                 ComposeQueryWith("category=business&language=en&country=us"));
 
@@ -37,7 +37,7 @@ namespace NewsAPI.Tests.TestData
         private void AddCountriesTest() {
              Add(new TopHeadlinesRequest()
             {
-                Country = Constants.Countries.US
+                Country = Country.US
             },
             $"{_options.BaseAddress}top-headlines?country=us");
         }

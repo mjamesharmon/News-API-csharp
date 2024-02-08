@@ -48,8 +48,8 @@ namespace NewsAPI.Models
         /// <summary>
         /// The country of the source to restrict articles to.
         /// </summary>
-        [RequestParameter("country", typeof(EnumValueSerializer))]
-        public Countries? Country { get; set; }
+        [RequestParameter("country", typeof(CountryValueSerializer))]
+        public Country? Country { get; set; }
         /// <summary>
         /// Each request returns a fixed amount of results. Page through them by increasing this.
         /// </summary>

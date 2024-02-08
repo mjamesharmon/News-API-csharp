@@ -28,7 +28,7 @@ namespace NewsAPI.Tests.TestData
 
 			Add(new SourcesRequest()
 			{
-				Country = Constants.Countries.US
+				Country = Country.US
 			},
 			$"{_options.BaseAddress}top-headlines/sources?country=us");
 
@@ -36,7 +36,7 @@ namespace NewsAPI.Tests.TestData
             {
                 Category = Category.Business,
                 Language = Language.EN,
-                Country = Constants.Countries.US
+                Country = Country.US
             },
         $"{_options.BaseAddress}top-headlines/sources?" +
 				"category=business&language=en&country=us");

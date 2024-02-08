@@ -23,8 +23,8 @@ namespace NewsAPI.Models
         /// <summary>
         /// The country to limit sources to
         /// </summary>
-        [RequestParameter("country", typeof(EnumValueSerializer))]
-        public Countries? Country { get; set; }
+        [RequestParameter("country", typeof(CountryValueSerializer))]
+        public Country? Country { get; set; }
 
     }
 }

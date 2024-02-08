@@ -26,7 +26,7 @@ namespace NewsAPI.Models
         [JsonConverter(typeof(JsonStringLanguageConverter))]
         public Language? Language { get; set; }
         [JsonPropertyName("country")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
-        public Countries? Country { get; set; } 
+        [JsonConverter(typeof(JsonStringCountryConverter))]
+        public Country? Country { get; set; } 
     }
 }
