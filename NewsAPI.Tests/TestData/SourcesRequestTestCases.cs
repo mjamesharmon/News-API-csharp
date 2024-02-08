@@ -6,7 +6,6 @@ namespace NewsAPI.Tests.TestData
 {
 	public class SourcesRequestTestCases : TheoryData<SourcesRequest,string>
 	{
-
 		private NewsApiClientOptions _options = new();
 
         public SourcesRequestTestCases()

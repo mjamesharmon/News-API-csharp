@@ -7,7 +7,6 @@ namespace NewsAPI.Tests.TestData
 {
 	public class TopHeadlinesTestCases : TheoryData<TopHeadlinesRequest,string>
 	{
-
         private NewsApiClientOptions _options = new();
 
         public TopHeadlinesTestCases()
