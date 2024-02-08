@@ -20,8 +20,8 @@ namespace NewsAPI.Models
         [JsonPropertyName("url")]
         public string? Url { get; set; } 
         [JsonPropertyName("category")]
-        [JsonConverter(typeof(JsonStringEnumConverter))]
-        public Categories? Category { get; set; } 
+        [JsonConverter(typeof(JsonStringCategoryConverter))]
+        public Category? Category { get; set; } 
         [JsonPropertyName("language")]
         [JsonConverter(typeof(JsonStringLanguageConverter))]
         public Language? Language { get; set; }

@@ -13,8 +13,8 @@ namespace NewsAPI.Models
         /// <summary>
         ///  restricts sources to a specific news category
         /// </summary>
-        [RequestParameter("category", typeof(EnumValueSerializer))]
-        public Categories? Category { get; set; }
+        [RequestParameter("category", typeof(CategoryValueSerializer))]
+        public Category? Category { get; set; }
         /// <summary>
         /// The language to restrict sources to
         /// </summary>

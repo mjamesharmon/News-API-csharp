@@ -38,8 +38,8 @@ namespace NewsAPI.Models
         /// <summary>
         /// If you want to restrict the headlines to a specific news category, add these here.
         /// </summary>
-        [RequestParameter("category", typeof(EnumValueSerializer))]
-        public Categories? Category { get; set; }
+        [RequestParameter("category", typeof(CategoryValueSerializer))]
+        public Category Category { get; set; }
         /// <summary>
         /// The language to restrict articles to.
         /// </summary>

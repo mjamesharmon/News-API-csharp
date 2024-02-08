@@ -16,7 +16,7 @@ namespace NewsAPI.Tests.TestData
 
 			Add(new SourcesRequest()
 			{
-				 Category=Constants.Categories.Business
+				 Category=Category.Business
 			},
             $"{_options.BaseAddress}top-headlines/sources?category=business");
 
@@ -34,7 +34,7 @@ namespace NewsAPI.Tests.TestData
 
             Add(new SourcesRequest()
             {
-                Category = Constants.Categories.Business,
+                Category = Category.Business,
                 Language = Language.EN,
                 Country = Constants.Countries.US
             },

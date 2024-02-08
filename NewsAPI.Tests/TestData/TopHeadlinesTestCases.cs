@@ -27,7 +27,7 @@ namespace NewsAPI.Tests.TestData
 
             Add(new TopHeadlinesRequest()
             {
-                Category = Constants.Categories.Business,
+                Category = Category.Business,
                 Language = Language.EN,
                 Country = Constants.Countries.US
             },
@@ -54,7 +54,7 @@ namespace NewsAPI.Tests.TestData
         private void AddCategoryTest() {
              Add(new TopHeadlinesRequest()
             {
-                Category = Constants.Categories.Business
+                Category = Category.Business
             },
             ComposeQueryWith("category=business"));
         }
